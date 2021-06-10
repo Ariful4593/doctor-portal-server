@@ -5,9 +5,7 @@ const MongoClient = require('mongodb').MongoClient;
 const fileUpload = require('express-fileupload')
 require('dotenv').config()
 
-const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0.xsirj.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority`;
-
-
+const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.xsirj.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority`;
 const app = express();
 
 app.use(bodyParser.json());
@@ -22,10 +20,11 @@ app.get('/', (req, res) => {
 
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 client.connect(err => {
-    const appointmentCollection = client.db("doctorsPortal").collection("appointment");
+    const appointmentCollection = client.db("arReview").collection("arReviewData");
     const doctorCollection = client.db("doctorsPortal").collection("doctorCollection");
     app.post('/addAppointment', (req, res) => {
         const appointment = req.body;
+        console.log(appointment);
         appointmentCollection.insertOne(appointment)
             .then(result => {
                 res.send(result.insertedCount > 0)
